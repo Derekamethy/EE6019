@@ -1,0 +1,26 @@
+# EEG data / derived caches
+*.edf
+*.npz
+*.npy
+*.joblib
+*.pkl
+cache/
+caches/
+models/
+exports/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# Local environment
+.env
+.DS_Store
+Thumbs.db
+
+# Large generated artifacts
+*.log
+clinical_error_analysis_exports*/
