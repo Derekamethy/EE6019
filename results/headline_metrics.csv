@@ -1,0 +1,8 @@
+metric,value,aggregation,scope
+macro_event_sensitivity,0.98,macro across subjects,canonical final report
+median_subject_far_per_hour,0.2455,median across subjects,canonical final report
+mean_detected_event_delay_s,10.64,reported mean for detected events,canonical final report
+pooled_detected_events,53,count across cohort,canonical final report
+pooled_total_events,55,count across cohort,canonical final report
+pooled_false_alarm_events,178,count across cohort,canonical final report
+pooled_far_per_hour,0.3066,178 alarms / 580.57 hours,canonical final report

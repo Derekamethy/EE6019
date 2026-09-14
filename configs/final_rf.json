@@ -1,0 +1,20 @@
+{
+  "pipeline": "canonical_patient_specific_rf",
+  "patients": "chb01-chb10",
+  "epoch_len_s": 2,
+  "bandpass_low_hz": 0.5,
+  "bandpass_high_hz": 50.0,
+  "bandpass_method": "butter_sos",
+  "butter_order": 4,
+  "history_epochs": 3,
+  "base_feature_dim": 443,
+  "stacked_candidate_dim": 1772,
+  "top_k_features": 30,
+  "rf_n_estimators": 500,
+  "rf_max_depth": 12,
+  "rf_min_samples_leaf": 1,
+  "rf_max_features": "sqrt",
+  "threshold_selection": "inner validation",
+  "min_duration_epochs": 3,
+  "evaluation": "within-subject file-level leave-one-seizure-out"
+}
