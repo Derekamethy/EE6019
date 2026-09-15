@@ -6,7 +6,7 @@ Patient-specific seizure-event detection on the public CHB-MIT scalp EEG dataset
 
 **UCC EE6019 Research Project · Yangdeyi Yang**
 
-[Engineering showcase](https://derekamethy.github.io/EEG-seizure-detection-website/) · [Privacy-redacted final report](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf) · [Canonical RF notebook](notebooks/canonical/01_final_random_forest_pipeline.ipynb) · [Error-analysis lineage](clinical_error_analysis/)
+[Engineering showcase](https://derekamethy.github.io/EEG-seizure-detection-website/) · [Privacy-redacted final report](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf) · [RF reference notebook](notebooks/reference/01_final_rf_reference.ipynb) · [Error-analysis lineage](clinical_error_analysis/)
 
 [![EEG seizure detection engineering showcase](assets/hero_showcase.png)](https://derekamethy.github.io/EEG-seizure-detection-website/)
 
@@ -140,20 +140,21 @@ The headline forest is therefore too large for a strict low-memory MCU without f
 ## Repository map
 
 ```text
-src/eeg_seizure_detection/   Public Python package interface over the canonical implementation
-notebooks/canonical/          Final RF pipeline and separate 1D-CNN add-on
-clinical_error_analysis/     Reported v1-v5 error-analysis notebooks, reports and evidence
+src/eeg_seizure_detection/   Primary engineering implementation, split by responsibility
+extensions/cnn/              Separate 1D-CNN experimental implementation
+notebooks/reference/          English, output-free historical reference notebooks
+clinical_error_analysis/     Reported v1-v5 lineage, reports, evidence, and reference notebooks
 configs/final_rf.json         Machine-readable final RF configuration
 results/                      Canonical result tables with aggregation labels
 assets/                       Model-comparison and feature-importance figures
 data/                         Dataset access / redistribution notes
 docs/                         Privacy-redacted report and provenance audit
-scripts/                      Extraction, release QA and reproduction utilities
+scripts/                      Release QA and reproduction utilities
 ```
 
-`legacy_core.py` is generated from the canonical notebook so the public package does not silently diverge from the historical implementation. Smaller modules such as `data.py`, `features.py`, `models.py`, and `evaluation.py` expose the implementation by responsibility.
+The primary implementation now lives in responsibility-specific Python modules under `src/eeg_seizure_detection/`. `legacy_core.py` is retained only as a thin compatibility re-export for older imports; it no longer contains the main implementation.
 
-The separate 1D-CNN notebook is retained as an experimental comparison. It is not the canonical final-report benchmark and should not be read as replacing the RF result.
+The 1D-CNN experiment is implemented separately under `extensions/cnn/`. The notebooks under `notebooks/reference/` are preserved only as English, output-free historical references and are not the primary code interface.
 
 ## Reproduction
 
@@ -165,7 +166,7 @@ python scripts/check_release.py
 python scripts/run_final_rf.py --data-root /path/to/chb-mit --rebuild-cache
 ```
 
-The command writes a new patient-summary CSV under `outputs/` and does not modify the historical notebooks or reported result files. A clean Python 3.11 environment has been used to verify editable installation, package import, CLI startup, and the final RF configuration interface.
+The command writes a new patient-summary CSV under `outputs/` and does not modify the reference notebooks or reported result files. A clean Python 3.11 environment has been used to verify editable installation, package import, CLI startup, and the final RF configuration interface.
 
 ## Scientific boundaries
 
@@ -184,7 +185,7 @@ A separate deep-learning/domain-generalisation rebuild exists as exploratory fol
 
 ## Release integrity and provenance
 
-This public release is built in a separate `github_release` working copy. The original EE6019 research files are not deleted or overwritten by the release workflow. `scripts/check_release.py` verifies repository structure, Python syntax, notebook JSON validity, runtime dependency declarations, relative Markdown links, local-user-path leakage, the five reported error-analysis notebooks, and exclusion of the exploratory DL/DG rebuild.
+This public release is built in a separate `github_release` working copy. The original EE6019 research files are not deleted or overwritten by the release workflow. `scripts/check_release.py` verifies repository structure, Python syntax, notebook JSON validity, runtime dependencies, relative Markdown links, local-user-path leakage, English-only public source/reference material, the five reported error-analysis notebooks, and exclusion of the exploratory DL/DG rebuild.
 
 The public academic report at [`docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf`](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf) replaces only the cover page to remove the student identification number; pages 2-49 preserve the original report content. See [`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md) for evidence precedence and claim boundaries.
 
