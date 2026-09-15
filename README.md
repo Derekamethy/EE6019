@@ -183,11 +183,11 @@ The highest-value next steps are methodological rather than cosmetic: replace no
 
 A separate deep-learning/domain-generalisation rebuild exists as exploratory follow-up work, but it is intentionally excluded from this repository because it did not contribute validated real-data results to the reported EE6019 project.
 
-## Release integrity and provenance
+## Provenance and reproducibility
 
-This public release is built in a separate `github_release` working copy. The original EE6019 research files are not deleted or overwritten by the release workflow. `scripts/check_release.py` verifies repository structure, Python syntax, notebook JSON validity, runtime dependencies, relative Markdown links, local-user-path leakage, English-only public source/reference material, the five reported error-analysis notebooks, and exclusion of the exploratory DL/DG rebuild.
+The reported results are anchored to the final report, the reference notebooks, and the exported result tables included in this repository. The maintained Python implementation under `src/eeg_seizure_detection/` reorganises the study logic into responsibility-specific modules for easier inspection and reuse.
 
-The public academic report at [`docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf`](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf) replaces only the cover page to remove the student identification number; pages 2-49 preserve the original report content. See [`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md) for evidence precedence and claim boundaries.
+`scripts/check_release.py` provides lightweight structural QA for the public repository, including syntax, dependency, link, notebook, and claim-boundary checks. A privacy-redacted copy of the final academic report is available at [`docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf`](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf). See [`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md) for evidence precedence and claim boundaries.
 
 ## License and data
 
