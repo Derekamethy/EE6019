@@ -2,11 +2,22 @@
 
 Patient-specific seizure-event detection on the public CHB-MIT scalp EEG dataset, combining signal processing, classical machine learning, event-level evaluation, deployment-feasibility analysis, and a five-stage clinical error-analysis loop.
 
-**Project:** UCC EE6019 Research Report  
-**Author:** Yangdeyi Yang  
+**Project:** UCC EE6019 Research Report
+
+**Author:** Yangdeyi Yang
 **Engineering showcase:** https://derekamethy.github.io/EEG-seizure-detection-website/
 
 > This repository is a cleaned public release. The original research files are preserved separately and are never modified by the release-building workflow.
+
+## At a glance
+
+| Cohort | Retrospective EEG | Seizures detected | Macro sensitivity | Median FAR |
+| --- | ---: | ---: | ---: | ---: |
+| 10 patients (`chb01`-`chb10`) | 580.57 h | 53 / 55 | 0.98 | 0.2455 / h |
+
+**Skills demonstrated:** EEG signal processing | feature engineering | classical ML | leakage-aware validation | event-level metrics | model compression / deployment profiling
+
+**Quick links:** [Engineering showcase](https://derekamethy.github.io/EEG-seizure-detection-website/) | [Privacy-redacted final report](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf) | [Canonical RF notebook](notebooks/canonical/01_final_random_forest_pipeline.ipynb) | [Clinical Error Analysis v1-v5](clinical_error_analysis/) | [Reproduction entry point](#reproduction-entry-point)
 
 ## What the system does
 
@@ -38,6 +49,8 @@ The reported study used `chb01`-`chb10`: **580.57 hours** of retrospective EEG a
 Different aggregation conventions are intentionally kept separate. Machine-readable versions are in [`results/headline_metrics.csv`](results/headline_metrics.csv), [`results/model_benchmark.csv`](results/model_benchmark.csv), and [`results/feature_reduction_comparison.csv`](results/feature_reduction_comparison.csv).
 
 ![Final model comparison](assets/final_multi_model_comparison.png)
+
+*Model-family benchmark used to select Random Forest; the headline Top-30 / 500-tree RF above is the later tuned final configuration.*
 
 ## What I implemented
 

@@ -9,6 +9,25 @@ description = "Patient-specific EEG seizure detection and clinical error analysi
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [{name = "Yangdeyi Yang"}]
+dependencies = [
+  "numpy",
+  "pandas",
+  "scipy",
+  "scikit-learn",
+  "matplotlib",
+  "seaborn",
+  "mne",
+  "joblib",
+  "xgboost",
+  "emlearn",
+]
+
+[project.optional-dependencies]
+notebook = ["jupyter"]
+
+[project.urls]
+"Engineering showcase" = "https://derekamethy.github.io/EEG-seizure-detection-website/"
+"Repository" = "https://github.com/Derekamethy/EE6019"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
