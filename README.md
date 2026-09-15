@@ -52,19 +52,17 @@ I designed and implemented the end-to-end research workflow rather than only tra
 
 ## System architecture
 
-```mermaid
-flowchart LR
-    A[CHB-MIT EDF + annotations] --> B[22-channel bipolar alignment]
-    B --> C[0.5-50 Hz Butterworth filtering]
-    C --> D[Non-overlapping 2 s epochs]
-    D --> E[443 spectral + synchrony features]
-    E --> F[4-frame temporal stack: 1772 candidates]
-    F --> G[Fold-local Top-30 selection]
-    G --> H[Patient-specific 500-tree Random Forest]
-    H --> I[Probability smoothing + validation threshold + duration rule]
-    I --> J[Event sensitivity / FAR / delay]
-    J --> K[Error analysis and guarded refinement]
-```
+The pipeline is grouped into five stages so the full system is readable at normal GitHub zoom without an interactive diagram.
+
+| Stage | Processing path | Output / purpose |
+| --- | --- | --- |
+| **1 · Data & channels** | CHB-MIT EDF + annotations → 22-channel bipolar alignment | Standardised multichannel EEG with consistent channel order and polarity |
+| **2 · Preprocessing** | 0.5–50 Hz Butterworth filtering → non-overlapping 2 s epochs | Labelled EEG windows for feature extraction |
+| **3 · Feature engineering** | 443 spectral + synchrony features → 4-frame temporal stack (1,772 candidates) → fold-local Top-30 selection | Compact, leakage-aware representation for each outer evaluation fold |
+| **4 · Model & decision logic** | Patient-specific 500-tree Random Forest → probability smoothing → validation-selected threshold → duration rule | Sustained event decisions rather than isolated positive windows |
+| **5 · Evaluation & refinement** | Event sensitivity / FAR / delay → v1-v5 error analysis → cohort-level guard | Evidence-driven iteration with rejected regressions kept visible |
+
+The key separation is deliberate: **feature selection and threshold tuning happen inside training/validation data, while the held-out outer evaluation remains untouched until scoring.**
 
 ## Engineering decisions
 
