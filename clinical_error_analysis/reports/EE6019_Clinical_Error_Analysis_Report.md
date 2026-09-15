@@ -1,22 +1,22 @@
-# EE6019 临床误差分析与定向改进报告
+# EE6019 Clinical Error Analysis and Targeted Refinement Report
 
-## 1. 当前 detector 的已知局限
-- 当前系统对工件的鲁棒性主要来自带通滤波和最短持续时间约束，并未引入专用工件分类器。
-- 因此，高灵敏度并不自动意味着临床上更稳健：某些病人仍可能出现明显延迟或不可忽略的误报。
-- 本次分析特别聚焦 `chb04` 的延迟检测问题和 `chb08` 的误报问题。
+## 1. Known limitations of the current detector
+- Artifact robustness currently comes mainly from band-pass filtering and the minimum-duration rule; no dedicated artifact classifier is used.
+- High sensitivity therefore does not automatically imply robust event detection: some patients can still show substantial delay or non-trivial false alarms.
+- This analysis focuses on delayed detections in `chb04` and false alarms in `chb08`.
 
-## 2. chb04 延迟案例总结
-- 检出的延迟 TP 事件数量：**2**
-- 最大延迟：**104.00 s**
-- 中位延迟：**62.00 s**
-- 这些案例说明：即使模型最终抓到了发作，报警时间也可能明显滞后于临床上更希望的告警时点。
+## 2. Summary of delayed detections in chb04
+- Detected delayed true-positive events: **2**
+- Maximum delay: **104.00 s**
+- Median delay: **62.00 s**
+- These cases show that detecting an event eventually does not guarantee timely detection; the alarm can occur substantially later than the preferred event onset.
 
-## 3. chb08 误报案例总结
-- chb08 误报事件数量：**15**
-- 启发式分类里占比最高的误报原因：**uncertain**
-- 这部分结果用来回答：模型到底是在被节律性非发作活动误导，还是在被疑似工件、边界过渡态误导。
+## 3. Summary of false alarms in chb08
+- False-alarm events in chb08: **15**
+- Most common heuristic false-alarm label: **uncertain**
+- This analysis asks whether errors are associated with rhythmic non-seizure activity, suspected artifacts, or transition states.
 
-### 3.1 chb08 误报分类统计
+### 3.1 chb08 false-alarm classification summary
 fp_reason,Count,Share
 
 uncertain,14,0.9333333333333333
@@ -25,10 +25,10 @@ transition_state,1,0.06666666666666667
 
 
 
-## 4. TP / FP / FN 特征差异
-- 这里的比较不是为了重新训练模型，而是为了识别‘成功事件’和‘失败事件’在频带、同步、工件代理和分数行为上的结构性差异。
+## 4. TP / FP / FN feature differences
+- These comparisons are diagnostic rather than retraining steps; they identify systematic differences in spectral, synchrony, artifact-proxy, and score behaviour across successful and failed events.
 
-### 4.1 事件类型特征汇总（节选）
+### 4.1 Event-type feature summary (selected rows)
 EventType,Feature,N,Mean,Median,IQR
 
 FN,delta_power_mean_mean,2,406547850.20958436,406547850.20958436,57440236.58131689
@@ -57,7 +57,7 @@ FN,score_mean,2,0.09655815395369291,0.09655815395369291,0.08147645927114883
 
 
 
-### 4.2 事件类型效应量排序（节选）
+### 4.2 Event-type effect-size ranking (selected rows)
 Comparison,Feature,Mean_Left,Mean_Right,StdDiff,AbsStdDiff
 
 TP vs FN,score_peak,0.9162750488592728,0.1485148497347037,5.465089323227287,5.465089323227287
@@ -78,11 +78,11 @@ TP vs FN,theta_power_mean_mean,782365188.3366026,209431128.71718562,0.9146513738
 
 
 
-## 5. 定向改进实验结果
-- 候选变体固定保持最终 tuned RF 的 `top_k=30` 和 RF 超参数不变，只修改输入特征或后处理。
-- 先在 `chb04 / chb08` 上选最优单一变体，再拿该变体回到全部 10 位病人做全局检查。
+## 5. Targeted refinement experiments
+- Candidate variants keep the final tuned RF configuration (`top_k=30` and RF hyperparameters) fixed and change only input features or post-processing.
+- Variants are first screened on `chb04 / chb08`, then the selected candidate is checked across all 10 patients.
 
-### 5.1 重点病人比较
+### 5.1 Focus-patient comparison
 Patient,Model,TopK,Hours,True_Seizures,Sensitivity,FAR_per_Hour,Mean_Delay_s,Median_Delay_s,Median_Threshold,FP_events,Variant
 
 chb04,random_forest,30,152.0561111111111,4.0,1.0,0.5918867669464123,35.5,15.0,0.551,89,baseline_rf_top30
@@ -103,7 +103,7 @@ chb08,random_forest,30,20.00611111111111,5.0,1.0,0.5998167226680736,10.0,10.0,0.
 
 
 
-### 5.2 最佳变体排序
+### 5.2 Variant ranking
 Variant,chb08_far_improvement,chb04_delay_improvement,focus_fp_event_improvement,passes_sensitivity_guard
 
 artifact_aware_rf,0.09996945377801225,0.0,54,True
@@ -112,7 +112,7 @@ sync_expanded_rf,-0.049984726889006126,-15.5,30,True
 
 
 
-### 5.3 全体 10 位病人：baseline vs best variant
+### 5.3 All 10 patients: baseline vs selected variant
 Variant,Patient,Patients,Sensitivity,FAR_per_Hour,Mean_Delay_s,Median_Delay_s,FP_events,Selected_Best_Variant
 
 baseline_rf_top30,MACRO,10,0.9777777777777779,0.39074760718812335,9.955238095238096,5.0,233,False
@@ -121,18 +121,18 @@ artifact_aware_rf,MACRO,10,0.7873015873015873,0.1853784372906424,8.4529100529100
 
 
 
-## 6. 改进是否值得纳入主模型
-- 当前自动选出的最佳单一变体：**artifact_aware_rf**
-- 相比 baseline，最佳变体的宏观变化为：Sensitivity -0.1905，FAR/hr -0.2054，Mean Delay -1.5023 s。
-- 这一结果更适合作为“局部有效的定向修补策略”，是否纳入主模型仍需谨慎。
+## 6. Should the refinement be adopted into the main model?
+- Automatically selected single best variant: **artifact_aware_rf**
+- Relative to baseline, the selected variant changes macro Sensitivity by -0.1905, FAR/hr by -0.2054, and Mean Delay by -1.5023 s.
+- This result is better interpreted as a locally effective targeted repair; adoption into the main model still requires caution.
 
-## 7. 论文级批判性反思
-- 本次分析表明，单看总体灵敏度会掩盖病人特异性的失败模式。
-- `chb04` 提醒我们：检测到发作并不等于足够及时，延迟本身就是临床意义上的误差。
-- `chb08` 提醒我们：误报并不总是纯噪声，部分误报可能对应节律性非发作活动、边界过渡态，甚至是高振幅工件。
-- 因此，后续工作更合理的路线不是盲目继续调 RF 超参数，而是加入更明确的工件处理、同步特征设计和病例级解释框架。
+## 7. Critical interpretation
+- Aggregate sensitivity alone can hide patient-specific failure modes.
+- `chb04` shows that detecting a seizure is not equivalent to detecting it promptly; delay is itself an important event-level error.
+- `chb08` shows that false alarms are not always simple noise; some may correspond to rhythmic non-seizure activity, transition states, or high-amplitude artifacts.
+- A more useful next step is therefore explicit artifact handling, improved synchrony features, and case-level interpretation rather than blind RF hyperparameter tuning.
 
-## 8. 导出文件索引
+## 8. Exported evidence index
 - chb04_delay_events_df: <LOCAL_EXPORT_PATH>
 - chb08_fp_events_df: <LOCAL_EXPORT_PATH>
 - clinical_case_export_df: <LOCAL_EXPORT_PATH>
@@ -145,4 +145,4 @@ artifact_aware_rf,MACRO,10,0.7873015873015873,0.1853784372906424,8.4529100529100
 - variant_ranking_df: <LOCAL_EXPORT_PATH>
 - best_variant_global_df: <LOCAL_EXPORT_PATH>
 - best_variant_vs_baseline_df: <LOCAL_EXPORT_PATH>
-- Markdown 报告: <LOCAL_EXPORT_PATH>
+- Markdown report: <LOCAL_EXPORT_PATH>

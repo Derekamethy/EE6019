@@ -8,7 +8,7 @@ from eeg_seizure_detection.evaluation import (
     extract_binary_runs,
 )
 from eeg_seizure_detection.features import temporal_stack_features
-from eeg_seizure_detection.preprocessing import apply_duration_constraint
+from eeg_seizure_detection.evaluation import apply_duration_constraint
 
 
 class CoreBehaviourTests(unittest.TestCase):

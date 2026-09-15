@@ -47,7 +47,7 @@ The strongest accepted improvement across the branch was `proxy_augmented_rf`. L
 
 ## Evidence navigation
 
-- `notebooks/`: executable v1-v5 analysis history.
+- `reference_notebooks/`: English, output-free v1-v5 historical analysis references.
 - `reports/`: written interpretation for each iteration.
 - `results/v5/`: final CSV evidence tables and representative case figures.
 - `results/v5/global_guard_df.csv`: cohort-level acceptance guard.
