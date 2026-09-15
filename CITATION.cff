@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the software project."
+title: "EEG Seizure Detection from Multichannel Scalp EEG"
+type: software
+authors:
+  - family-names: Yang
+    given-names: Yangdeyi
+repository-code: "https://github.com/Derekamethy/eeg-seizure-detection"
+url: "https://derekamethy.github.io/EEG-seizure-detection-website/"
+license: MIT
+version: 0.1.0

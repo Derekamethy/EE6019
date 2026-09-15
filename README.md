@@ -2,7 +2,7 @@
 
 Patient-specific seizure-event detection on the public CHB-MIT scalp EEG dataset, combining signal processing, classical machine learning, leakage-aware validation, event-level error analysis, and deployment-oriented profiling.
 
-[![Release QA](https://github.com/Derekamethy/EE6019/actions/workflows/release-qa.yml/badge.svg)](https://github.com/Derekamethy/EE6019/actions/workflows/release-qa.yml)
+[![Release QA](https://github.com/Derekamethy/eeg-seizure-detection/actions/workflows/release-qa.yml/badge.svg)](https://github.com/Derekamethy/eeg-seizure-detection/actions/workflows/release-qa.yml)
 
 **UCC EE6019 Research Project · Yangdeyi Yang**
 

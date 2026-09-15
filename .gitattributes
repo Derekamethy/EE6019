@@ -9,6 +9,7 @@
 *.yaml text eol=lf
 *.csv text eol=lf
 *.ipynb text eol=lf
+*.ipynb linguist-documentation
 
 *.pdf binary
 *.png binary

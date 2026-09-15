@@ -8,12 +8,14 @@ import tomllib
 ROOT = Path(__file__).resolve().parents[1]
 REQUIRED = [
     "README.md",
+    "CITATION.cff",
     "pyproject.toml",
     "configs/final_rf.json",
     "notebooks/canonical/01_final_random_forest_pipeline.ipynb",
     "clinical_error_analysis/README.md",
     "clinical_error_analysis/notebooks/v5_clinical_error_analysis.ipynb",
     "src/eeg_seizure_detection/legacy_core.py",
+    "tests/test_core_behaviour.py",
     "results/headline_metrics.csv",
     "docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf",
 ]
@@ -44,15 +46,22 @@ try:
 except Exception as exc:
     errors.append(f"pyproject parse failed: {exc}")
 
-text_suffixes = {".py", ".md", ".csv", ".json", ".toml", ".txt"}
+text_suffixes = {".py", ".md", ".csv", ".json", ".toml", ".txt", ".cff"}
 windows_user_prefix = "C:" + chr(92) + "Users" + chr(92)
 private_patterns = [re.compile(re.escape(windows_user_prefix), re.I)]
+github_repo_prefix = "github.com/Derekamethy/"
+stale_repo_refs = (
+    github_repo_prefix + "EE" + "6019",
+    github_repo_prefix + "Patient-specific-" + "seazure-detection",
+)
 for path in ROOT.rglob("*"):
     if not path.is_file() or path.suffix.lower() not in text_suffixes:
         continue
     text = path.read_text(encoding="utf-8", errors="ignore")
     if any(pattern.search(text) for pattern in private_patterns):
         errors.append(f"local Windows user path leaked: {path.relative_to(ROOT)}")
+    if any(stale in text for stale in stale_repo_refs):
+        errors.append(f"stale repository URL in public file: {path.relative_to(ROOT)}")
 markdown_link_pattern = re.compile(r"!?\[[^\]]*\]\(([^)]+)\)")
 root_resolved = ROOT.resolve()
 for readme in [ROOT / "README.md", ROOT / "clinical_error_analysis/README.md"]:
