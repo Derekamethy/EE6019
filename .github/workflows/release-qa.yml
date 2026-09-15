@@ -2,7 +2,7 @@ name: Release QA
 
 on:
   push:
-    branches: [main, portfolio-rebuild-2026-09]
+    branches: [main]
   pull_request:
 
 permissions:
@@ -22,3 +22,20 @@ jobs:
 
       - name: Run dependency-light release checks
         run: python scripts/check_release.py
+
+  smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install package
+        run: python -m pip install -e .
+
+      - name: Run synthetic behaviour tests
+        run: python -m unittest discover -s tests -v
