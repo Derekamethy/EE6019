@@ -101,7 +101,7 @@ The separate deep-learning/domain-generalisation rebuild is intentionally exclud
 
 The public-release workflow never edits or deletes the original EE6019 research directory. All cleaning, path sanitisation, restructuring and documentation are performed inside the separate `github_release` working copy. `scripts/check_release.py` verifies repository structure, Python syntax, notebook JSON validity, local-user-path leakage, the presence of all five clinical-error notebooks, and exclusion of the exploratory DL/DG rebuild.
 
-The full academic report is temporarily omitted from the public branch while a privacy-redacted copy is prepared. The scientific results represented in this repository are cross-checked against that final report. See [`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md) for release provenance and claim boundaries.
+A privacy-redacted public copy of the final academic report is available at [`docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf`](docs/EE6019_Final_Report_PUBLIC_REDACTED.pdf). Only the cover page was replaced to remove the student identification number; pages 2-49 are preserved from the original report. See [`docs/PROJECT_AUDIT.md`](docs/PROJECT_AUDIT.md) for release provenance and claim boundaries.
 
 ## Licensing and data
 
